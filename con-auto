@@ -1,0 +1,122 @@
+#!/bin/bash
+
+sleep 5m
+rm /tmp/lock1
+rm /tmp/lock2
+cd /usr/share/con-auto ; ./con-status  &
+
+##################
+wifi () {
+rm /tmp/con-my 
+sleep 1
+
+cd /usr/share/con-auto ; ./wifi-conect\ ;
+
+for (( ; ; ))
+do
+
+next1=$( cat /tmp/con-my | wc -l )
+if [ $next1 -eq 1 ]
+then 
+
+
+break
+else
+sleep 5
+fi 
+
+done
+}
+###################
+ ping -c 1 173.194.116.239 &&  connect1=0 || connect1=1  
+
+if [ "$connect1" -eq 0 ]
+
+then
+sleep 1
+else
+sleep 1
+wifi
+fi
+
+######################
+con-tor () {
+for (( ; ; ))
+do
+torsr1=$( ps -A | grep -w "tor" | wc -l )
+if [ $torsr1 -eq 1 ]
+then
+
+ping -c 1 173.194.116.239 &&  connect=0 || connect=1  
+sleep 10
+if [ $connect -eq 0 ]
+then 
+sleep 10
+else
+ping -c 1 173.194.116.239 &&  connect2=0 || connect2=1
+if [ $connect2 -eq 0 ]
+then
+sleep 10
+else
+lock1=$( cd /tmp ; ls | grep lock1 | wc -l )
+if [ $lock1 -eq 0 ]
+then
+echo 1 > /tmp/lock2
+rm /tmp/con-my 
+killall tor
+sleep 1
+
+killall wpa_supplicant 
+sleep 1
+
+wifi
+rm /tmp/lock2
+else 
+sleep 1
+fi
+
+fi
+fi 
+fi
+done
+
+}
+######################
+
+
+
+
+
+
+for (( ; ; ))
+do
+sleep 5
+ping -c 1 173.194.116.239 &&  next3=0 || next3=1 
+sleep 5
+torsr=$( ps -A | grep -w "tor" | wc -l )
+if [ $next3 -eq 0 -a $torsr -lt 1 ]
+then 
+
+cd /usr/share/con-auto ; ./con-start
+
+sleep 5
+else
+
+sleep 15
+ping -c 1 173.194.116.239 &&  connect8=0 || connect8=1  
+sleep 5
+if [ "$connect8" -eq 0 ]
+then
+sleep 5
+else
+lock3=$( cd /tmp ; ls | grep lock1 | wc -l )
+lock4=$( cd /tmp ; ls | grep lock2 | wc -l )
+if [ $lock3 -eq 0 -a $lock4 -eq 0 ]
+then
+wifi
+else
+sleep 1
+fi
+fi 
+fi
+done & cd /usr/share/con-auto ; ./con-wifi &  con-tor && fg && fg && fg
