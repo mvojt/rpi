@@ -1,4 +1,4 @@
-# rpi
+# rpi-tor-agent
 rpi-tor-agent
 Raspberry tor agent -(tor:Martin Vojtíšek)
 
