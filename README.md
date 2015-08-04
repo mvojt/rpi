@@ -1,6 +1,6 @@
 # rpi-tor-agent
 rpi-tor-agent
-Raspberry tor agent -(tor:Martin Vojtíšek)
+Raspberry tor agent -(autor:Martin Vojtíšek)
 
 
 
